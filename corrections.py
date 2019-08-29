@@ -31,7 +31,7 @@ class Corrector:
 			# associate each word in the phrase to the rest, and its index in the phrase
 			for i in range(len(p)):
 				word = p[i]
-				# (word, phrase, index) tuples in table D
+				# relating (phrase, index) to associated word in table D
 				D[word].append((p, i))
 				# loading word into trie T
 				C = T.insert(word)
@@ -61,8 +61,24 @@ class Corrector:
 		context = self.context
 		corrected_string = ""
 		corrections = []
-		
-
+		T = self.trie
+		i = 0
+		j = 0
+		m = len(text)
+		while(i < m):
+			word = text[i]
+			cword,found = T.search(word)
+			# the Trie does not currently prejudicially search for a nearest word, but rather takes the first close match
+			# but this could be augmented to have a similarity heuristic done at every step to better search for the closest
+			# match in the Trie (choosing characters by least dissimilar at each step--reducing state-space to polynomial O(26*n)
+			# rather than the exponential space of the full tree O(26^n), but not necessarily returning the best possible result
+			# in the whole tree).
+			if cword in context:
+				if words_close_enough(word,cword):
+					pass
+			i+=1
+	def words_close_enough(left,right):
+		return True
 
 # tests
 if __name__ == '__main__':
