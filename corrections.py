@@ -15,39 +15,8 @@ should then place 'and' and 'friends' making C = "President John F Kennedy and f
 corrections [(+ President),(Jon -> John),(+ F),(Kenedy -> Kennedy)].
 '''
 from jaro import jaro
+from trie import Trie
 from collections import defaultdict
-class Trie:
-	def __init__(self, words=None):
-		def _trie():
-			return defaultdict(_trie)
-		self.T = _trie()
-
-	# insert a word into the Trie
-	def insert(self, word):
-		T = self.T
-		for c in word:
-			T = T[c]
-		T[None]
-
-	# TODO: consider word is empty or none, though it never should be
-	# TODO: consider when there are no words in the Trie
-	# search for the nearest match in the Trie
-	def search(self, word):
-		#T = self.T
-		#i = 0
-		
-		# use next(iter(dict)) to get a key out of the dict when there's no match
-		#while(
-		pass
-
-	# TODO: make a helpful representation of Trie
-	def __repr__(self):
-		return self.T
-
-	def __str__(self):
-		return str(self.T)
-		
-
 class Corrector:
 	def __init__(self, context): 
 		# each phrase in the context, split into  word-by-word lists
@@ -92,10 +61,7 @@ class Corrector:
 		context = self.context
 		corrected_string = ""
 		corrections = []
-		for k in context:
-			print(k)
-		print(self.trie)
-
+		
 
 
 # tests
