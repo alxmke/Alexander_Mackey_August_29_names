@@ -35,24 +35,6 @@ class Corrector:
 				D[word].append((p, i))
 				# loading word into trie T
 				C = T.insert(word)
-				
-				
-		'''
-		for k in D:
-			s, l, r = D[k]
-			print(k, s, l, r)
-			n = len(s)
-			print("  before:")
-			for i in range(l):
-				print("   " + s[i])
-			print("  after:")
-			for i in range(r, n):
-				print("   " + s[i])
-		
-		# null string returns []
-		if len("".split()):
-			print("TEST")
-		'''
 		self.trie = T
 		self.context = D
 
@@ -67,18 +49,50 @@ class Corrector:
 		m = len(text)
 		while(i < m):
 			word = text[i]
-			cword,found = T.search(word)
 			# the Trie does not currently prejudicially search for a nearest word, but rather takes the first close match
 			# but this could be augmented to have a similarity heuristic done at every step to better search for the closest
 			# match in the Trie (choosing characters by least dissimilar at each step--reducing state-space to polynomial O(26*n)
 			# rather than the exponential space of the full tree O(26^n), but not necessarily returning the best possible result
 			# in the whole tree).
-			if cword in context:
-				if words_close_enough(word,cword):
-					pass
-			i+=1
-	def words_close_enough(left,right):
-		return True
+			cword,found = T.search(word)
+			if cword in context and words_close_enough(word,cword):
+				# choosing first in list arbitrarily at present--searching the full list presents more complexity, with
+				# potentially more correctness, similarly to searching more through the Trie
+				phrase, index = context[cword][0]
+				# add the phrase preceeding the correction
+				for k in range(index):
+					addition = phrase[k]
+					corrected_string += addition
+					corrections.append(f'+ {addition}')
+				# add the correction
+				corrected_string += cword
+				# move to the next word and check for replacements in the rest of the text
+				i+=1
+				k = index+1
+				n = len(phrase)
+				while k < n and i < m:
+					cword = phrase[k]
+					word = text[i]
+					if words_close_enough(word,cword):
+						corrected_string += cword
+						corrections.append(f'{word} -> {cword}')
+						i+=1
+					else:
+						corrected_string += cword 
+						corrections.append(f'+ {cword}')
+					k+=1
+				# for when the phrase runs past the end of the text
+				while k < n:
+					addition = phrase[k]
+					corrected_string += addition
+					corrections.append(f'+ {addition}')
+					k+=1
+			else:
+				i+=1
+				corrected_string += word
+
+def words_close_enough(left,right):
+	return True
 
 # tests
 if __name__ == '__main__':
