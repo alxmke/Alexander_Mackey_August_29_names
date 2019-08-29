@@ -55,7 +55,7 @@ class Corrector:
 		# trie to build a nearest match for word, presuming it's not in table D
 		T = Trie()
 		# relational hashtable associating words to phrases, a list will be searched in case of a conflict
-		D = dict(list)
+		D = defaultdict(list)
 
 		# process in each phrase in the context
 		for p in P:
@@ -63,7 +63,7 @@ class Corrector:
 			for i in range(len(p)):
 				word = p[i]
 				# (word, phrase, index) tuples in table D
-				D[word] = (p, i)
+				D[word].append((p, i))
 				# loading word into trie T
 				C = T.insert(word)
 				
