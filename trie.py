@@ -42,7 +42,7 @@ class Trie:
 			c = str(next(iter(T)))
 			T = T[c]
 			nearest += c
-		return (nearest, found)
+		return ("".join(nearest), found)
 				
 			
 	# TODO: make a helpful representation of Trie
