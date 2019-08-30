@@ -2,9 +2,9 @@
 The basic premise of `corrections` will be to take in the user's given context C, and compare
 each given piece of text T against it to find which words will or won't be corrected. If a
 word W is determined to be a near-enough match to a word X within the context phrase P as to
-be corrected, it will correct W to X if the word left of X within P matches the word left of W
-and the word right of W matches the word right of X in P (both by similarity). Should there be
-multiple P belonging to X, then 
+be corrected, then it will be.
+
+Further metrics will be explored to determine and discover similaritiy in the search Trie.
 '''
 from jaro import jaro
 from trie import Trie
@@ -56,9 +56,10 @@ class Corrector:
 				corrections.append(f'({word} -> {cword}) @{i}')
 		return " ".join(text), corrections
 
-def words_close_enough(left,right):
+# threshold of 0.75 chosen fairly arbitrarily as to fit the test data, not sure on optimal number currently
+def words_close_enough(left,right,threshold=0.75):
 	s = jaro(left,right)
-	return s > 0.75
+	return s > threshold
 
 # tests
 if __name__ == '__main__':
