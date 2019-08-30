@@ -15,7 +15,7 @@ class Corrector:
 		P = [p.split() for p in context]
 		# trie to build a nearest match for word, presuming it's not in table D
 		T = Trie()
-		# relational hashtable associating words to phrases, a list will be searched in case of a conflict
+		# relational hashtable associating words to phrases
 		D = defaultdict(list)
 
 		# process in each phrase in the context
@@ -63,15 +63,21 @@ def words_close_enough(left,right,threshold=0.75):
 
 # tests
 if __name__ == '__main__':
+	test_context = ["John Wayne", "Tom Hanks", "Tom Cruise", "John Hamm",  "William", "Clint Eastwood", "Thomas Watson", "yesterday"]
 	test_inputs = [
+		# passing input:
 		# worth noting tom and tomorrow more jaro-similarity than tim and tom, wonder what better metrics could get a better match?
 		"tomorrow I have a meeting with Tim Hanks Tom Crus and Eastwood",
 		"Michael likes movies with Jon Way and Client East",
 		"Jonn invited me Jon Ham and Jon Wane over for a lunch",
+
+		# failing input:
+		"i got a call yetserday from Tomas Watsin"
 	]
 
-	test_context = ["John Wayne", "Tom Hanks", "Tom Cruise", "John Hamm",  "William", "Clint Eastwood"]
 	C = Corrector(test_context)
 	for text in test_inputs:
 		corrected_string, corrections = C.corrections(text)
 		print(f'\'{text}\'\n\tbecame\n\'{corrected_string}\'\n\twith\n corrections: {corrections}\n')
+
+	
